@@ -7,6 +7,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	matlas "go.mongodb.org/atlas/mongodbatlas"
 )
 
 func dataSourceMongoDBAtlasDatabaseUser() *schema.Resource {
@@ -170,4 +171,29 @@ func dataSourceMongoDBAtlasDatabaseUserRead(ctx context.Context, d *schema.Resou
 	}))
 
 	return nil
+}
+
+func flattenRoles(roles []matlas.Role) []interface{} {
+	roleList := make([]interface{}, 0)
+	for _, v := range roles {
+		roleList = append(roleList, map[string]interface{}{
+			"role_name":       v.RoleName,
+			"database_name":   v.DatabaseName,
+			"collection_name": v.CollectionName,
+		})
+	}
+
+	return roleList
+}
+
+func flattenScopes(l []matlas.Scope) []map[string]interface{} {
+	scopes := make([]map[string]interface{}, len(l))
+	for i, v := range l {
+		scopes[i] = map[string]interface{}{
+			"name": v.Name,
+			"type": v.Type,
+		}
+	}
+
+	return scopes
 }

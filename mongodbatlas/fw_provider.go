@@ -364,7 +364,7 @@ func (p *MongodbtlasProvider) DataSources(context.Context) []func() datasource.D
 
 func (p *MongodbtlasProvider) Resources(context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		// NewExampleResource,
+		NewDatabaseUserRS,
 	}
 }
 
